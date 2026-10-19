@@ -8,7 +8,11 @@ Run `npm test`. Replay requires no model, network, or credentials and rejects st
 
 ## Live Run
 
-Run `OPENCODE_EVAL_MODEL=provider/model npm run eval:behavioral` from a source checkout. The runner uses an empty temporary project, denies model-facing tools, and writes only a redacted report to `.artifacts/behavioral-evals/latest.json`.
+Install OpenCode 2 and provide the selected provider's API key through its supported environment variable, then run `OPENCODE_EVAL_MODEL=provider/model npm run eval:behavioral` from a source checkout. An optional model variant uses `provider/model#variant`. This live runner targets the V2 session API; OpenCode 1 remains supported by the plugin and smoke tests.
+
+The runner uses an empty temporary project, denies model-facing tools, and writes only a redacted report to `.artifacts/behavioral-evals/latest.json`. It accepts text only from a successfully completed turn; failed or interrupted turns remain incomplete even if partial text matches the oracles.
+
+Native OpenCode 2 login credentials live in its database and are not copied into the isolated runtime. A legacy `auth.json`, when present, is copied for migration compatibility, but can be absent or stale. Use environment credentials for reproducible live runs; the runner does not copy your session database.
 
 ## Review And Acceptance
 

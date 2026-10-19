@@ -4,19 +4,32 @@ on:
   pull_request:
     paths:
       - ".opencode/**"
+      - "index.js"
       - "skills/**"
       - "scripts/opencode-smoke.mjs"
+      - "tests/opencode-smoke.test.mjs"
       - "package.json"
+      - "package-lock.json"
       - ".github/workflows/opencode-smoke.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  opencode-1-18-7:
+  opencode:
+    name: opencode-${{ matrix.version }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["1.18.7", "2.0.14", "2.0.32"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "24"
-      - run: node scripts/opencode-smoke.mjs 1.18.7
+          cache: "npm"
+      - run: npm ci
+      - run: node scripts/opencode-smoke.mjs ${{ matrix.version }}
