@@ -2,10 +2,10 @@
   <img src="assets/logo.svg" alt="opencode-power-pack" width="100%" />
 </p>
 
-<h1 align="center">OpenCode Power Pack for Claude Code, Codex, OpenCode + Pi</h1>
+<h1 align="center">OpenCode Power Pack for Claude Code, Codex, OpenCode 1 + 2, and Pi</h1>
 
 <p align="center">
-  <i>Fifty-five portable workflows for Claude Code, Codex, OpenCode, and Pi.<br/>
+  <i>Fifty-five portable workflows for Claude Code, Codex, OpenCode 1 and 2, and Pi.<br/>
   Code review, security audit, feature development, frontend design, project memory, and authoring tools.</i>
 </p>
 
@@ -24,6 +24,8 @@
 
 <p align="center">
   <a href="#installation"><b>Install</b></a> ·
+  <a href="https://skills.waybarrios.com/docs/"><b>Documentation</b></a> ·
+  <a href="#opencode-2-and-humanizer"><b>OpenCode 2</b></a> ·
   <a href="#selective-install-with-npm"><b>Select Skills</b></a> ·
   <a href="#claude-code-quick-install"><b>Claude Code</b></a> ·
   <a href="#codex-quick-install"><b>Codex Quick Install</b></a> ·
@@ -35,7 +37,25 @@
   <a href="#acknowledgments"><b>Credits</b></a>
 </p>
 
-## New in v0.5.0: Lightweight Native Sandboxes
+## OpenCode 2 and humanizer
+
+The current `main` branch supports OpenCode 2 and keeps OpenCode 1.18.7 support. Both hosts load all 55 skills and the three feature-development specialists. Smoke tests cover OpenCode 1.18.7, 2.0.14, and 2.0.32, including effective read-only permissions on V2.
+
+Install the current plugin in OpenCode 2:
+
+```bash
+opencode plugin add "opencode-power-pack@git+https://github.com/waybarrios/opencode-power-pack.git"
+```
+
+The new `humanizer` skill rewrites English and Spanish copy in a direct, natural voice. It keeps facts, names, numbers, and code intact. The `authoring` profile now includes `humanizer`, `mcp-builder`, `paper-summarizer`, and `skill-creator`.
+
+Invoke it with `$humanizer` in Codex, `/humanizer` in OpenCode, or `/opencode-power-pack:humanizer` in Claude Code.
+
+**Use the Git installation for these additions.** The published npm package and tag `v0.5.0` still contain 54 skills and the V1-only plugin. They do not include `humanizer` or the OpenCode 2 plugin port. The npm selective installer can still copy its released skills into `.agents/skills` for OpenCode 2.
+
+For host commands, update steps, and the current catalog, see the [documentation](https://skills.waybarrios.com/docs/) and [skill reference](https://skills.waybarrios.com/docs/skills/). The [OpenCode compatibility guide](docs/opencode-compatibility.md) covers source selection and V2 permissions.
+
+## Native sandboxes in v0.5.0
 
 OpenCode Power Pack now includes an opt-in, fail-closed sandbox runner for safer command execution from **Codex, OpenCode, Claude Code, and Pi**. It gives all four agents one portable capability contract with four least-privilege profiles, while using native Seatbelt isolation on macOS and Bubblewrap on Linux.
 
@@ -160,10 +180,19 @@ Maintainers publish the mirror with the `Publish GitHub Package` workflow. Relea
 | `frontend` | Frontend implementation and anti-generic design critique |
 | `security` | Security review, threat modeling, static analysis, validation, and reporting |
 | `huggingface` | Model discovery, local inference, training, evaluation, Spaces, and AWS deployment |
-| `authoring` | Skill and MCP authoring plus technical-paper summarization |
+| `authoring` | Skills, MCP servers, technical-paper summaries, and natural copy editing on `main` |
 | `project-memory` | Audit and maintain durable project guidance |
 
 Profiles automatically include required companion skills and can be combined with individual skill names. The default destination is `~/.agents/skills`; `--project` finds the current Git root and installs into its `.agents/skills` directory. Existing directories are skipped unless `--force` is provided, and replacements are staged with rollback plus per-skill locking. Every copied skill retains its provenance, third-party notices, and license texts. Use `--dry-run` to preview or `--all` to install the complete catalog.
+
+The commands above use the published npm catalog. To selectively install `humanizer` or the four-skill `authoring` profile from current source:
+
+```bash
+npx --package=git+https://github.com/waybarrios/opencode-power-pack.git opencode-power-pack install humanizer --dry-run
+npx --package=git+https://github.com/waybarrios/opencode-power-pack.git opencode-power-pack install humanizer
+```
+
+Use `install --profile authoring` instead of `install humanizer` for all four authoring skills. These commands install into `~/.agents/skills`. For a project-local install, run the same command from the target repository with `--project`.
 
 The npm installer and the full Claude Code/Codex/OpenCode plugins are alternative activation paths. Claude Code users should prefer the namespaced plugin because the selective installer currently targets the portable `.agents/skills` location used by Codex, OpenCode, and Pi. If a full plugin is already active, selectively copying the same skills does not reduce that plugin's loaded catalog.
 
@@ -261,7 +290,7 @@ It complements [obra/superpowers](https://github.com/obra/superpowers), which pr
 | Review | `fp-check` | Systematically verify a suspected security bug to a TRUE/FALSE POSITIVE verdict |
 | Review | `vuln-report` | Draft a single-vulnerability disclosure report in GitHub advisory style |
 | Review | `agentic-actions-auditor` | Audit GitHub Actions workflows for prompt-injection risk in AI agent integrations |
-| Review | `security-threat-model` | Repository-grounded threat modeling — trust boundaries, assets, abuse paths |
+| Review | `security-threat-model` | Model threats using repository evidence, trust boundaries, assets, and abuse paths |
 | Review | `differential-review` | Security-focused differential review of a diff/PR with blast-radius analysis |
 | Review | `variant-analysis` | Find similar vulnerabilities/bugs across a codebase from one initial pattern |
 | Review | `sarif-parsing` | Parse, filter, dedupe, and convert SARIF output from CodeQL/Semgrep/other scanners |
@@ -281,30 +310,30 @@ It complements [obra/superpowers](https://github.com/obra/superpowers), which pr
 | Authoring | `humanizer` | Rewrite AI-generated copy in ES/EN into direct, natural prose without inventing facts |
 | Authoring | `mcp-builder` | Design and build MCP servers in TypeScript or Python |
 | Authoring | `skill-creator` | Create, test, and improve reusable `SKILL.md` workflows |
-| Hugging Face | `hf-cli` | Core `hf` CLI usage — auth, cache, repos, jobs, papers, Spaces, and more |
+| Hugging Face | `hf-cli` | Use the `hf` CLI for auth, cache, repos, jobs, papers, and Spaces |
 | Hugging Face | `hf-mem` | Estimate memory needed to load Safetensors/GGUF weights for inference |
 | Hugging Face | `huggingface-best` | Find and compare the best model for a task via official benchmark leaderboards |
-| Hugging Face | `huggingface-datasets` | Dataset Viewer API workflows — metadata, pagination, search, filters |
+| Hugging Face | `huggingface-datasets` | Dataset Viewer API workflows for metadata, pagination, search, and filters |
 | Hugging Face | `huggingface-papers` | Look up and analyze Hugging Face / arXiv paper pages via the papers API |
 | Hugging Face | `huggingface-paper-publisher` | Publish and manage research papers on the Hub, including research-article templates |
 | Hugging Face | `huggingface-tool-builder` | Build reusable scripts/tools around the Hugging Face API |
 | Hugging Face | `huggingface-local-models` | Select and run GGUF models locally with llama.cpp (CPU/Metal/CUDA/ROCm) |
-| Hugging Face — Training | `huggingface-llm-trainer` | Fine-tune LLMs (TRL: SFT/DPO/GRPO, or Unsloth) on Hugging Face Jobs |
-| Hugging Face — Training | `huggingface-vision-trainer` | Fine-tune object detection, image classification, and SAM/SAM2 segmentation models |
-| Hugging Face — Training | `train-sentence-transformers` | Train bi-encoder/cross-encoder/sparse embedding models |
-| Hugging Face — Training | `trl-training` | TRL CLI training — SFT, DPO, GRPO, KTO, RLOO, reward modeling |
-| Hugging Face — Training | `huggingface-community-evals` | Run local evaluations with inspect-ai / lighteval |
-| Hugging Face — Training | `huggingface-trackio` | Track and visualize ML training experiments with Trackio |
-| Hugging Face — Spaces | `huggingface-spaces` | Build, deploy, and debug Gradio/Docker/static Spaces |
-| Hugging Face — Spaces | `huggingface-gradio` | Build Gradio web UIs and demos in Python |
-| Hugging Face — Spaces | `huggingface-lora-space-builder` | Build and publish a Gradio Space demo for a user-provided LoRA |
-| Hugging Face — Spaces | `huggingface-zerogpu` | Write/debug ZeroGPU-constrained Gradio Space code |
-| Hugging Face — Cloud | `hf-cloud-aws-context-discovery` | Discover the user's local AWS context before any AWS work |
-| Hugging Face — Cloud | `hf-cloud-python-env-setup` | Set up an isolated Python env for SageMaker/AWS work |
-| Hugging Face — Cloud | `hf-cloud-sagemaker-deployment-planner` | Entry point for planning a SageMaker model deployment |
-| Hugging Face — Cloud | `hf-cloud-sagemaker-iam-preflight` | Ensure a usable SageMaker execution role exists before deploying |
-| Hugging Face — Cloud | `hf-cloud-serving-image-selection` | Pick the right SageMaker serving container image |
-| Hugging Face — Cloud | `hf-cloud-sagemaker-production-defaults` | Create a SageMaker endpoint with autoscaling, alarms, and tagging by default |
+| Hugging Face training | `huggingface-llm-trainer` | Fine-tune LLMs (TRL: SFT/DPO/GRPO, or Unsloth) on Hugging Face Jobs |
+| Hugging Face training | `huggingface-vision-trainer` | Fine-tune object detection, image classification, and SAM/SAM2 segmentation models |
+| Hugging Face training | `train-sentence-transformers` | Train bi-encoder/cross-encoder/sparse embedding models |
+| Hugging Face training | `trl-training` | Train with the TRL CLI using SFT, DPO, GRPO, KTO, RLOO, and reward modeling |
+| Hugging Face training | `huggingface-community-evals` | Run local evaluations with inspect-ai / lighteval |
+| Hugging Face training | `huggingface-trackio` | Track and visualize ML training experiments with Trackio |
+| Hugging Face Spaces | `huggingface-spaces` | Build, deploy, and debug Gradio/Docker/static Spaces |
+| Hugging Face Spaces | `huggingface-gradio` | Build Gradio web UIs and demos in Python |
+| Hugging Face Spaces | `huggingface-lora-space-builder` | Build and publish a Gradio Space demo for a user-provided LoRA |
+| Hugging Face Spaces | `huggingface-zerogpu` | Write/debug ZeroGPU-constrained Gradio Space code |
+| Hugging Face cloud | `hf-cloud-aws-context-discovery` | Discover the user's local AWS context before any AWS work |
+| Hugging Face cloud | `hf-cloud-python-env-setup` | Set up an isolated Python env for SageMaker/AWS work |
+| Hugging Face cloud | `hf-cloud-sagemaker-deployment-planner` | Entry point for planning a SageMaker model deployment |
+| Hugging Face cloud | `hf-cloud-sagemaker-iam-preflight` | Ensure a usable SageMaker execution role exists before deploying |
+| Hugging Face cloud | `hf-cloud-serving-image-selection` | Pick the right SageMaker serving container image |
+| Hugging Face cloud | `hf-cloud-sagemaker-production-defaults` | Create a SageMaker endpoint with autoscaling, alarms, and tagging by default |
 | JavaScript | `transformers-js` | Run Hugging Face models directly in JS/TS (browser or Node/Bun/Deno) |
 | Project memory | `agents-md-improver` | Audit project rules and propose targeted improvements |
 | Project memory | `agents-md-revise` | Capture durable session learnings in project rules |
@@ -376,7 +405,7 @@ Restart OpenCode after installation. One plugin adapts to the host version: Open
 
 The compatibility smoke tests cover OpenCode **1.18.7, 2.0.14, and 2.0.32**. The `SKILL.md` format stays the same across these hosts.
 
-To pin a published release, append its tag to the same spec:
+To pin a release, append its tag to the same spec. Choose a release that includes the V2 port when using OpenCode 2; `v0.5.0` predates it:
 
 ```bash
 opencode plugin add "opencode-power-pack@git+https://github.com/waybarrios/opencode-power-pack.git#<tag>"

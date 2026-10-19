@@ -5,12 +5,12 @@
     "name": "Wayner Barrios",
     "url": "https://github.com/waybarrios"
   },
-  "description": "Portable software-development skills for Claude Code, Codex, OpenCode, and Pi.",
+  "description": "Skills for Claude Code, Codex, OpenCode 1 and 2, and Pi.",
   "plugins": [
     {
       "name": "opencode-power-pack",
       "source": "./",
-      "description": "Fifty-five workflows for review, security, feature development, frontend work, authoring, and ML tooling.",
+      "description": "Fifty-five workflows for review, security, feature development, frontend work, writing, authoring, and ML tools.",
       "category": "productivity",
       "tags": [
         "software-development",
