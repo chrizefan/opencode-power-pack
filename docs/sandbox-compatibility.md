@@ -13,7 +13,9 @@ Locally inspected host versions:
 
 The repository smoke tests retain their separately pinned minimum versions. Host APIs evolve, so adapter tests and this matrix must be updated together.
 
-OpenCode plugin compatibility is additionally verified by model-free smoke tests on 1.18.7, 2.0.14, and 2.0.32 (2026-10-19). V2 checks load the real package directory, inspect the final catalogs, and evaluate specialist permission requests with permissive global rules. This checks plugin permissions, not whole-agent sandbox isolation.
+The `main` branch passes model-free OpenCode plugin smoke tests on 1.18.7, 2.0.14, and 2.0.32 (2026-10-19). V2 checks load the package directory, inspect the final catalogs, and evaluate specialist permission requests with permissive global rules. These checks cover plugin permissions. They do not test whole-agent sandbox isolation.
+
+Install from Git `main` for the OpenCode 2 plugin. The published npm package and tag `v0.5.0` contain the earlier V1-only plugin. The sandbox runner remains available in npm `0.5.0` and can be called from either OpenCode version.
 
 ## Compatibility Levels
 

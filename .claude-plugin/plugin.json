@@ -3,12 +3,12 @@
   "name": "opencode-power-pack",
   "displayName": "OpenCode Power Pack",
   "version": "0.5.0",
-  "description": "Fifty-five software-development workflows for Claude Code, Codex, OpenCode, and Pi.",
+  "description": "Fifty-five workflows for Claude Code, Codex, OpenCode 1 and 2, and Pi.",
   "author": {
     "name": "Wayner Barrios",
     "url": "https://github.com/waybarrios"
   },
-  "homepage": "https://github.com/waybarrios/opencode-power-pack",
+  "homepage": "https://skills.waybarrios.com",
   "repository": "https://github.com/waybarrios/opencode-power-pack",
   "license": "MIT AND Apache-2.0",
   "keywords": [

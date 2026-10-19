@@ -26,7 +26,7 @@ function clone(value) {
 test("README announces the sandbox and documents every supported host", async () => {
   const readme = await readFile(path.join(REPO, "README.md"), "utf8");
 
-  assert.match(readme, /New in v0\.5\.0: Lightweight Native Sandboxes/);
+  assert.match(readme, /^## Native sandboxes in v0\.5\.0$/m);
   assert.match(readme, /sandbox doctor --json/);
   assert.match(readme, /sandbox exec --skill code-review -- git status --short/);
   assert.match(readme, /Run the sandbox from each agent/);
