@@ -543,6 +543,8 @@ test("runner rejects a workspace inside an upstream shared-write compatibility p
   const workspace = path.join(fixture, "claude", "project");
   await mkdir(workspace, { recursive: true });
   try {
+    // A repository-local TMPDIR must not resolve to the enclosing checkout.
+    await execFileAsync("git", ["init", "--quiet", workspace]);
     await assert.rejects(runSandboxedCommand({
       profile: profile("develop", { workspace: "write" }),
       allowedDomains: [],

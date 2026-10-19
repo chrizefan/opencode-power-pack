@@ -21,7 +21,9 @@ test("published package ships every skill and the sandbox runtime entrypoint", (
     cwd: REPO,
     encoding: "utf8",
   });
-  const [{ files }] = JSON.parse(output);
+  const parsed = JSON.parse(output);
+  // npm 12 keys the dry-run report by package name; older npm returns an array.
+  const { files } = Array.isArray(parsed) ? parsed[0] : Object.values(parsed)[0];
   const packaged = new Set(files.map((file) => file.path));
   const skillNames = readdirSync(join(REPO, "skills"))
     .filter((name) => existsSync(join(REPO, "skills", name, "SKILL.md")));
@@ -53,6 +55,15 @@ test("published package ships every skill and the sandbox runtime entrypoint", (
     "focused review metadata is published",
   );
   assert.ok(packaged.has("bin/opencode-power-pack.mjs"), "selective installer is published");
+  assert.ok(packaged.has("index.js"), "OpenCode 2 directory entrypoint is published");
+  assert.ok(
+    packaged.has(".opencode/plugins/opencode-power-pack.js"),
+    "OpenCode plugin entrypoint is published",
+  );
+  assert.ok(
+    packaged.has(".opencode/lib/agent-config.js"),
+    "OpenCode plugin definitions module is published",
+  );
   assert.ok(packaged.has("bin/sandbox/policy.mjs"), "sandbox policy resolver is published");
   assert.ok(packaged.has("bin/sandbox/runtime.mjs"), "sandbox runtime adapter is published");
   assert.ok(packaged.has("sandbox/contract.json"), "sandbox contract is published");
@@ -71,11 +82,21 @@ test("published package ships every skill and the sandbox runtime entrypoint", (
   }
 });
 
+test("package root exposes the same dual-host plugin as its npm entrypoint", async () => {
+  const { default: root } = await import("../index.js");
+  const { default: direct } = await import("../.opencode/plugins/opencode-power-pack.js");
+  assert.equal(root, direct);
+  assert.equal(root.id, "opencode-power-pack");
+  assert.equal(typeof root.setup, "function");
+  assert.equal(typeof root.server, "function");
+});
+
 test("plugin loads as an ES module without runtime warnings", () => {
   const packedRoot = mkdtempSync(join(tmpdir(), "opp-package-surface-"));
   try {
     mkdirSync(join(packedRoot, ".opencode"), { recursive: true });
     cpSync(join(REPO, ".opencode", "plugins"), join(packedRoot, ".opencode", "plugins"), { recursive: true });
+    cpSync(join(REPO, ".opencode", "lib"), join(packedRoot, ".opencode", "lib"), { recursive: true });
     cpSync(join(REPO, "skills"), join(packedRoot, "skills"), { recursive: true });
     writeFileSync(join(packedRoot, "package.json"), '{"type":"module"}\n', "utf8");
 
